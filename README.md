@@ -1,6 +1,6 @@
 # List of tutorials
 
-[Statistics - Survival Analysis](/statistics/survival-analysis.html)
+[Statistics - Survival Analysis](/tutorials/statistics/survival-analysis.html)
 
 ## Welcome to GitHub Pages
 
