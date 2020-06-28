@@ -400,5 +400,5 @@ nx.draw_circular(gr, edgelist=meek_edges, edge_color='green', with_labels=True, 
 
 ## References
 
-* [Lafferty, J., Liu, H., Wasserman, L., 2010. Directed Graphical Models.](http://www.stat.cmu.edu/~larry/=sml/DAGs.pdf)
-* [Shalizi, C., 2012. Discovering Causal Structure from Observations.](https://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch25.pdf)
+* <a href="http://www.stat.cmu.edu/~larry/=sml/DAGs.pdf" target="_blank"> Lafferty, J., Liu, H., Wasserman, L., 2010. Directed Graphical Models. </a>
+* <a href="https://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch25.pdf" target="_blank">Shalizi, C., 2012. Discovering Causal Structure from Observations.</a>
