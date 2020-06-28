@@ -9,7 +9,7 @@
   * Incorporation Dash in a PyQt project
   * Adding your Python library to pip
   * Network Analytics
-    * The PC algorithm for identifying a network's causal structure
+    * [The PC algorithm: identifying a network's causal structure](/tutorials/network-analytics/pc.html)
     * The Chow-Liu algorithm
     * Identifying back-door adjustment sets
     * The LiNGAM algorithm

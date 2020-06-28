@@ -1,20 +1,16 @@
 # The PC algorithm
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:2 depthTo:4 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [The PC algorithm](#the-pc-algorithm)
-	- [Identifying a network's causal structure](#identifying-a-networks-causal-structure)
-	- [Implementation](#implementation)
-		- [Import necessary libraries](#import-necessary-libraries)
-		- [Loading data](#loading-data)
-		- [Initialisation of the complete undirected graph](#initialisation-of-the-complete-undirected-graph)
-		- [Edge deletion](#edge-deletion)
-- [Using `norm` from the scipy stats package](#using-norm-from-the-scipy-stats-package)
-- [Defining the threshold function](#defining-the-threshold-function)
-- [Used to break out of the loop in a highly specific manner](#used-to-break-out-of-the-loop-in-a-highly-specific-manner)
-		- [Orientation of V-structures](#orientation-of-v-structures)
-		- [[Extra] Edge orientation using Meek Rules](#extra-edge-orientation-using-meek-rules)
-	- [References](#references)
+- [Identifying a network's causal structure](#identifying-a-networks-causal-structure)
+- [Implementation](#implementation)
+	- [Import necessary libraries](#import-necessary-libraries)
+	- [Loading data](#loading-data)
+	- [Initialisation of the complete undirected graph](#initialisation-of-the-complete-undirected-graph)
+	- [Edge deletion](#edge-deletion)
+	- [Orientation of V-structures](#orientation-of-v-structures)
+	- [[Extra] Edge orientation using Meek Rules](#extra-edge-orientation-using-meek-rules)
+- [References](#references)
 
 <!-- /TOC -->
 
@@ -88,11 +84,11 @@ It is now necessary to define the threshold function which will be used to test 
 where  Φ(⋅)  denotes the cumulative distribution function of N(0, 1) . For this example, we will use  𝛼 = 0.05.
 
 ```python
-# Using `norm` from the scipy stats package
+ # Using `norm` from the scipy stats package
 phi_inv = lambda x: norm.ppf( norm.cdf(x) )
 alpha = 0.05
 
-# Defining the threshold function
+ # Defining the threshold function
 threshold = lambda x: phi_inv(1 - alpha/2) / np.sqrt(n - x - 3)
 ```
 
@@ -121,7 +117,7 @@ def phi(df, X, Y, Z=None):
 Having defined the above function, we now get to the most important part of the PC Algorithm—which I've defined in a single function.
 
 ``` python
-# Used to break out of the loop in a highly specific manner
+ # Used to break out of the loop in a highly specific manner
 class RemoveEdge(Exception): pass
 
 def pc(data, verbose=False):
