@@ -1,7 +1,3 @@
----
-usemathjax: true
----
-
 # Dynamic Mode Decomposition
 
 ## Introduction
