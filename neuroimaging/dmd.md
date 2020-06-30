@@ -1,7 +1,5 @@
 # Dynamic Mode Decomposition
 
-
-
 ## Introduction
 
 ### What is dynamic mode Decomposition?
@@ -44,9 +42,18 @@ data -= avg.reshape(shape)  # make mean 0
 data /= std.reshape(shape)  # make standard deviation 1
 ```
 
-### Autoregressive
+### Autoregressive model
 
-As explicited in Casorso et al. [[2](#references)], the dynamic mode decomposition uses a 1st-order autoregressive model. 
+As explicited in Casorso et al. [[2](#references)], the dynamic mode decomposition uses a 1st-order autoregressive model.
+
+\[
+x_t = A \cdot x_{t-1} + \epsilon_t, \ \ \ \ \ \ \ \forall t \in [2, ..., T]
+\]
+
+where \(x_t\) of length \(N\) represents the fMRI time series at time
+t,
+
+
 
 ### Eigendecomposition
 
