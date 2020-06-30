@@ -12,7 +12,7 @@
 
 ### Input data format
 
-The format of the input data should be a 2-dimensional matrix having $N$ rows, corresponding to the number of regions of interest—or nodes—and $T$ columns, corresponding to the number of sampled timepoints.
+The format of the input data should be a 2-dimensional matrix having $$N$$ rows, corresponding to the number of regions of interest—or nodes—and $$T$$ columns, corresponding to the number of sampled timepoints.
 
 As an example, let us load some test data from the nidmd Python package, downloaded from its GitHub source.
 
@@ -52,8 +52,7 @@ $$
 x_t = A \cdot x_{t-1} + \epsilon_t, \ \ \ \ \ \ \ \forall t \in [2, ..., T]
 $$
 
-where $x_t$ of length $N$ represents the fMRI time series at time
-$t$, matrix $A$ of size $N \cdot N$ is the model parameter that encodes the linear relationship between successive time points, $\epsilon_t$ are the residuals of the model, and $T$ is the number of time points.
+where $$x_t$$ of length $$N$$ represents the fMRI time series at time $$t$$ , matrix $$A$$ of size $$N \cdot N$$ is the model parameter that encodes the linear relationship between successive time points, $$\epsilon_t$$ are the residuals of the model, and $$T$$ is the number of time points.
 
 The matrix A is computed by solving the following equation
 
@@ -83,7 +82,7 @@ $$
 A = S \Lambda S^{-1}
 $$
 
-Here, the columns of $S$ are the eigenvectors of A, with the diagonal matrix $\Lambda$ containing its corresponding eigenvalues. These values can be symmetric sine $A$ is not symmetric and real.
+Here, the columns of $$S$$ are the eigenvectors of A, with the diagonal matrix $$\Lambda$$ containing its corresponding eigenvalues. These values can be symmetric sine $$A$$ is not symmetric and real.
 
 This eigendecomposition allows for the formulation of a _dynamic system_ as the suum of __linearly__ decoupled modes—here called dynamic modes.
 
