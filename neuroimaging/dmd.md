@@ -12,7 +12,7 @@
 
 ### Input data format
 
-The format of the input data should be a 2-dimensional matrix having `N` rows, corresponding to the number of regions of interest—or nodes—and `T` columns, corresponding to the number of sampled timepoints.
+The format of the input data should be a 2-dimensional matrix having $N$ rows, corresponding to the number of regions of interest—or nodes—and $T$ columns, corresponding to the number of sampled timepoints.
 
 As an example, let us load some test data from the nidmd Python package, downloaded from its GitHub source.
 
@@ -52,15 +52,118 @@ $$
 x_t = A \cdot x_{t-1} + \epsilon_t, \ \ \ \ \ \ \ \forall t \in [2, ..., T]
 $$
 
-where \(x_t\) of length \(N\) represents the fMRI time series at time
-t,
+where $x_t$ of length $N$ represents the fMRI time series at time
+$t$, matrix $A$ of size $N \cdot N$ is the model parameter that encodes the linear relationship between successive time points, $\epsilon_t$ are the residuals of the model, and $T$ is the number of time points.
 
+The matrix A is computed by solving the following equation
 
+$$
+\min_A \sum_{t=2}^{T} || x_t - A \cdot x_{t-1} ||^2
+$$
+
+The optimal solution is
+
+$$
+A = XY^T(YY^T)^{-1} \ \ \ \text{with} \ \ \ X = [x_2, ... x_T], \ \ Y = [x_1, ... x_{T-1}]
+$$
+
+Jumping back into Python, this yields
+
+``` python
+x = data[:, 1:]
+y = data[:, :-1]
+a = (x @ y.T) @ np.linalg.inv(y @ y.T)
+```
 
 ### Eigendecomposition
 
+The eigendecomposition of A gives rise to the following notation:
+
+$$
+A = S \Lambda S^{-1}
+$$
+
+Here, the columns of $S$ are the eigenvectors of A, with the diagonal matrix $\Lambda$ containing its corresponding eigenvalues. These values can be symmetric sine $A$ is not symmetric and real.
+
+This eigendecomposition allows for the formulation of a _dynamic system_ as the suum of __linearly__ decoupled modes—here called dynamic modes.
+
+The temporal characteristics of each mode are its damping time and period:
+
+$$
+\Delta_i = \frac{-1}{\log \lambda_i}, \ \ \ \ \ \ T_i = \frac{2\pi}{\arg \lambda_i}
+$$
+
+For the spatial characteristics, the eigenvector of each mode shows the relationship between different nodes—which are __regions of interest__ in the neuroimaging case.
+
+Back to Python, we have
+
+``` python
+eig_val, eig_vec = np.linalg.eig(a)
+
+eig_idx = np.abs(eig_val).argsort()[::-1]  # descending index
+```
+
+where `eig_idx` can be used to sort the eigenvalues and eigenvectors in the descending manner with respect to the absolute value.
+
+We must not forget to adjust the phase of the eigenvectors in order to assure their orthogonality
+
+``` python
+eig_vec = adjust_phase(eig_vec)
+```
+
+With the  `adjust_phase` method defined as follows
+
+``` python
+def adjust_phase(x):
+  """
+  Adjust phase of matrix for orthogonalization of columns.
+  Parameters
+  ----------
+  x : Array-like
+      data matrix
+  Returns
+  -------
+  ox : Array-like
+      data matrix with orthogonalized columns
+  """
+
+  x = np.asarray(x)
+  assert isinstance(x, np.ndarray)
+
+  # create empty instance for ox
+  ox = np.empty(shape=x.shape, dtype=complex)
+
+  for j in range(x.shape[1]):
+
+      # seperate real and imaginary parts
+      a = np.real(x[:, j])
+      b = np.imag(x[:, j])
+
+      # phase calculation
+      phi = 0.5 * np.arctan(2 * (a @ b) / (b.T @ b - a.T @ a))
+
+      # compute normalised a, b
+      anorm = np.linalg.norm(np.cos(phi) * a - np.sin(phi) * b)
+      bnorm = np.linalg.norm(np.sin(phi) * a + np.cos(phi) * b)
+
+      if bnorm > anorm:
+          if phi < 0:
+              phi -= np.pi / 2
+          else:
+              phi += np.pi / 2
+
+      adjed = np.multiply(x[:, j], cmath.exp(complex(0, 1) * phi))
+      ox[:, j] = adjed if np.mean(adjed) >= 0 else -1 * adjed
+
+  return ox
+```
+
 
 ## nidmd for Python
+
+Was the above process a bit too lengthy for your taste?
+
+You're in luck! A Python package called `nidmd` handles all the mathematical aspects of what was covered in the previous part. Moreover, it allows you to plot your results visually! Let's have a look.
 
 ### Import necessary libraries
 
