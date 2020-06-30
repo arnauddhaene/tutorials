@@ -1,3 +1,5 @@
+{% include lib/mathjax.html %}
+
 # Dynamic Mode Decomposition
 
 ## Introduction
